@@ -1,0 +1,11 @@
+node_modules/
+dist/
+release/
+work/
+*.ecloudkey
+*.key
+.env
+.env.*
+logs/
+*.log
+AGENTS.md

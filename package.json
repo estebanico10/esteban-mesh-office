@@ -1,0 +1,76 @@
+{
+  "name": "esteban-mesh-office",
+  "version": "1.4.0",
+  "description": "Esteban Mesh Office — Plataforma empresarial para espacios de trabajo de 10+ computadoras: descubrimiento automático LAN/Tailscale, inventario hardware, compartición masiva de discos, transferencias de alto volumen, chat por departamentos y auto-configuración USB",
+  "author": "Esteban Nicola",
+  "homepage": "https://estebanico.com",
+  "license": "MIT",
+  "private": true,
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && electron .\"",
+    "build": "vite build",
+    "start": "electron .",
+    "dist:win": "npm run build && electron-builder --win nsis --publish never",
+    "dist:dir": "npm run build && electron-builder --dir --win --publish never",
+    "release": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/publish-office-release.ps1",
+    "test": "node --test test/*.test.cjs"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.5.0",
+    "concurrently": "^9.2.1",
+    "electron": "^35.2.0",
+    "electron-builder": "^26.0.12",
+    "vite": "^6.3.5",
+    "wait-on": "^8.0.3"
+  },
+  "build": {
+    "appId": "com.estebanico.meshoffice",
+    "productName": "Esteban Mesh Office",
+    "artifactName": "Esteban-Mesh-Office-Setup-${version}.${ext}",
+    "copyright": "Copyright © 2026 Esteban Nicola",
+    "asar": true,
+    "files": [
+      "electron/**",
+      "build/icon.ico",
+      "build/icon.png",
+      "dist/**",
+      "node_modules/**",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "scripts",
+        "to": "scripts"
+      }
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "include": "build/installer.nsh",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
